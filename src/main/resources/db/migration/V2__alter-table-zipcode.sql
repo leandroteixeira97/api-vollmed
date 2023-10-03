@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS doctors RENAME COLUMN zipcode TO zip_code;
