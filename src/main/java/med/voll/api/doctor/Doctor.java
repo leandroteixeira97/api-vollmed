@@ -9,10 +9,10 @@ import med.voll.api.address.Address;
 
 @Table(name = "doctors")
 @Entity(name = "Doctor")
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Getter
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
