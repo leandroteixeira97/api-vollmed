@@ -1,10 +1,7 @@
 package med.voll.api.doctor;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import med.voll.api.address.Address;
 
 @Table(name = "doctors")
@@ -13,6 +10,7 @@ import med.voll.api.address.Address;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
+@Setter
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +23,7 @@ public class Doctor {
     private Specialty specialty;
     @Embedded
     private Address address;
+    private boolean expired;
 
     public Doctor(RegisterDoctorDTO registerDoctorDTO) {
         this.name = registerDoctorDTO.name();
@@ -33,5 +32,11 @@ public class Doctor {
         this.crm = registerDoctorDTO.crm();
         this.specialty = registerDoctorDTO.specialty();
         this.address = registerDoctorDTO.address();
+    }
+
+    public void updateInformations(UpdateDoctorDTO updateDoctorDTO) {
+        this.name = updateDoctorDTO.name() != null ? updateDoctorDTO.name() : name;
+        this.telephone = updateDoctorDTO.telephone() != null ? updateDoctorDTO.telephone() :  telephone;
+        this.address = updateDoctorDTO.address() != null ? updateDoctorDTO.address() : address;
     }
 }

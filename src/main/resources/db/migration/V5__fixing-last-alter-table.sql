@@ -1,0 +1,1 @@
+UPDATE doctors SET expired = false WHERE expired is null;
