@@ -26,7 +26,6 @@ The VollMed API offers the following key features:
 - Hospital Management: Create, read, update, and delete hospital information.
 - Doctor Registration: Register doctors with their specialties and contact details.
 - PostgreSQL Database: Data storage and retrieval using a PostgreSQL database.
-- More features are coming soon
 
 ## 3. Prerequisites
 
@@ -79,24 +78,22 @@ To use the VollMed API, you can interact with it using HTTP requests. You can us
 
 The VollMed API provides the following main endpoints:
 
-- `/doctors`: Register doctors and manage their details.
-- More endpoints are being developed right now
+- `/doctors`: POST Method | Register doctors and manage their details.
+- `/doctors`: GET Method | Gets all doctors with their details.
+- `/doctors`: PUT Method | Updates doctors and their details.
+- `/doctors`: DELETE Method | Logical deletion of doctors by its id.
 
 For detailed information on each endpoint and their supported operations, refer to the API documentation.
 
-## 8. Authentication
-
-Being developed
-
-## 9. Database
+## 8. Database
 
 VollMed API uses a PostgreSQL database to store and retrieve data. You can configure the database connection settings in the `application.yaml` file.
 
-## 10. Error Handling
+## 9. Error Handling
 
 The API provides detailed error responses in case of invalid requests or server errors. Refer to the API documentation for information on error codes and their meanings.
 
-## 11. Testing
+## 10. Testing
 
 To run tests for the VollMed API, use the following Maven command:
 
@@ -104,11 +101,11 @@ To run tests for the VollMed API, use the following Maven command:
 mvn test
 ```
 
-## 12. Contributing
+## 11. Contributing
 
 We welcome contributions to improve the VollMed API. If you'd like to contribute, please follow our [Contribution Guidelines](CONTRIBUTING.md).
 
-## 13. License
+## 12. License
 
 The VollMed API is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute this software as per the terms of the license.
 
