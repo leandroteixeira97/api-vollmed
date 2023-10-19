@@ -9,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/doctors")
@@ -19,23 +22,37 @@ public class DoctorController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> register(@RequestBody @Valid RegisterDoctorDTO registerDoctorDTO) {
-        doctorRepository.save(new Doctor(registerDoctorDTO));
-        return new ResponseEntity<>("The doctor was registered successfully", HttpStatus.OK);
+    public ResponseEntity<DetailedDoctorDTO> register(@RequestBody @Valid RegisterDoctorDTO registerDoctorDTO, UriComponentsBuilder uriComponentsBuilder) {
+        Doctor doctor = new Doctor(registerDoctorDTO);
+        doctorRepository.save(doctor);
+
+        URI uri = uriComponentsBuilder
+                .path("/doctors/{id}")
+                .buildAndExpand(doctor.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(new DetailedDoctorDTO(doctor));
     }
 
     @GetMapping
-    public Page<DoctorDTO> getDoctorsList(Pageable pagination) {
-        return doctorRepository.findAllByExpiredFalse(pagination).map(DoctorDTO::new);
+    public ResponseEntity<Page<DoctorDTO>> getDoctorsList(Pageable pagination) {
+        return ResponseEntity.ok(doctorRepository.findAllByExpiredFalse(pagination).map(DoctorDTO::new));
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<DetailedDoctorDTO> getDoctor(@PathVariable Long id) {
+        Doctor doctor = doctorRepository.getReferenceById(id);
+
+        return ResponseEntity.ok(new DetailedDoctorDTO(doctor));
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity<String> updateDoctor(@RequestBody @Valid UpdateDoctorDTO updateDoctorDTO) {
-        Doctor doctorOptional = doctorRepository.getReferenceById(updateDoctorDTO.id());
-        doctorOptional.updateInformations(updateDoctorDTO);
-        return new ResponseEntity<>("The doctor of id " + updateDoctorDTO.id() +
-                " was updated successfully!", HttpStatus.OK);
+    public ResponseEntity<DetailedDoctorDTO> updateDoctor(@RequestBody @Valid UpdateDoctorDTO updateDoctorDTO) {
+        Doctor doctor = doctorRepository.getReferenceById(updateDoctorDTO.id());
+        doctor.updateInformations(updateDoctorDTO);
+
+        return ResponseEntity.ok(new DetailedDoctorDTO(doctor));
     }
 
     @DeleteMapping(path = "/{doctorId}")
@@ -43,7 +60,6 @@ public class DoctorController {
     public ResponseEntity<String> deleteDoctor(@PathVariable Long doctorId) {
         Doctor doctor = doctorRepository.getReferenceById(doctorId);
         doctor.setExpired(true);
-        return new ResponseEntity<>("The doctor of id " + doctorId +
-                " was deleted successfully!", HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 }
