@@ -3,3 +3,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/vollmed_api
     username: postgres
     password: postgres
+
+server:
+  error:
+    include-stacktrace: never
