@@ -1,4 +1,4 @@
-package med.voll.api.infraestructure;
+package med.voll.api.infraestructure.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import med.voll.api.infraestructure.dto.ValidationErrorDTO;
