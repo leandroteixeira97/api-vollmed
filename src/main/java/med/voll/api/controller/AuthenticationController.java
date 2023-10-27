@@ -1,6 +1,9 @@
 package med.voll.api.controller;
 
 import med.voll.api.domain.user.AuthenticationInfoDTO;
+import med.voll.api.domain.user.User;
+import med.voll.api.infraestructure.security.JWTTokenDTO;
+import med.voll.api.infraestructure.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,11 +21,16 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping
-    public ResponseEntity<String> login(@RequestBody AuthenticationInfoDTO authenticationInfoDTO) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authenticationInfoDTO.username(), authenticationInfoDTO.password());
-        Authentication authentication = authenticationManager.authenticate(token);
+    @Autowired
+    private TokenService tokenService;
 
-        return ResponseEntity.ok().build();
+    @PostMapping
+    public ResponseEntity<JWTTokenDTO> login(@RequestBody AuthenticationInfoDTO authenticationInfoDTO) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authenticationInfoDTO.username(), authenticationInfoDTO.password());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        String JWTToken = tokenService.generateToken((User) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new JWTTokenDTO(JWTToken));
     }
 }
